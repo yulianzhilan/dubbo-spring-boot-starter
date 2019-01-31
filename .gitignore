@@ -3,4 +3,14 @@ target/
 .project
 .classpath
 *iml
-.idea
+.idea/
+
+#build
+build/
+out/
+
+#gradle
+gradle/
+gradlew
+gradlew.bat
+.gradle/
