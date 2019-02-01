@@ -23,6 +23,8 @@ import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -80,45 +82,72 @@ public class DubboConsumerAutoConfiguration extends DubboCommonAutoConfiguration
                 }
 
                 try {
-                    for (Field field : objClz.getDeclaredFields()) {
+                    List<Field> fieldList = new ArrayList<>();
+                    handleSuperClass(objClz, fieldList);
+                    for (Field field : fieldList) {
                         Reference reference = field.getAnnotation(Reference.class);
-                        if (reference != null) {
-                            DubboConsumerAutoConfiguration.this
-                                    .initIdConfigMap(DubboConsumerAutoConfiguration.this.properties);
-                            ReferenceBean<?> referenceBean =
-                                    DubboConsumerAutoConfiguration.this.getConsumerBean(beanName, field, reference);
-                            Class<?> interfaceClass = referenceBean.getInterfaceClass();
-                            String group = referenceBean.getGroup();
-                            String version = referenceBean.getVersion();
-                            ClassIdBean classIdBean = new ClassIdBean(interfaceClass, group, version);
-                            Object dubboReference =
-                                    DubboConsumerAutoConfiguration.DUBBO_REFERENCES_MAP.get(classIdBean);
-                            if (dubboReference == null) {
-                                synchronized (this) {
-                                    // double check
-                                    dubboReference =
-                                            DubboConsumerAutoConfiguration.DUBBO_REFERENCES_MAP.get(classIdBean);
-                                    if (dubboReference == null) {
-                                        referenceBean.afterPropertiesSet();
-                                        // dubboReference should not be null, otherwise it will cause
-                                        // NullPointerException
-                                        dubboReference = referenceBean.getObject();
-                                        DubboConsumerAutoConfiguration.DUBBO_REFERENCES_MAP.put(classIdBean,
-                                                dubboReference);
-                                    }
+                        DubboConsumerAutoConfiguration.this
+                                .initIdConfigMap(DubboConsumerAutoConfiguration.this.properties);
+                        ReferenceBean<?> referenceBean =
+                                DubboConsumerAutoConfiguration.this.getConsumerBean(beanName, field, reference);
+                        Class<?> interfaceClass = referenceBean.getInterfaceClass();
+                        String group = referenceBean.getGroup();
+                        String version = referenceBean.getVersion();
+                        ClassIdBean classIdBean = new ClassIdBean(interfaceClass, group, version);
+                        Object dubboReference =
+                                DubboConsumerAutoConfiguration.DUBBO_REFERENCES_MAP.get(classIdBean);
+                        if (dubboReference == null) {
+                            synchronized (this) {
+                                // double check
+                                dubboReference =
+                                        DubboConsumerAutoConfiguration.DUBBO_REFERENCES_MAP.get(classIdBean);
+                                if (dubboReference == null) {
+                                    referenceBean.afterPropertiesSet();
+                                    // dubboReference should not be null, otherwise it will cause
+                                    // NullPointerException
+                                    dubboReference = referenceBean.getObject();
+                                    DubboConsumerAutoConfiguration.DUBBO_REFERENCES_MAP.put(classIdBean,
+                                            dubboReference);
                                 }
                             }
-                            field.setAccessible(true);
-                            field.set(bean, dubboReference);
-                            if (logger.isDebugEnabled()) {
-                                logger.debug("initial consumer bean: " + beanName);
-                            }
+                        }
+                        field.setAccessible(true);
+                        field.set(bean, dubboReference);
+                        if (logger.isDebugEnabled()) {
+                            logger.debug("initial consumer bean: " + beanName + " -> " + field.getName());
                         }
                     }
                 } catch (Exception e) {
                     throw new BeanCreationException(beanName, e);
                 }
                 return bean;
+            }
+
+            /**
+             * 处理父类引用问题
+             *   abstract class @Reference {@see NullPointException}
+             *   info: objClz.getDeclaredFields() can only get all the field for current class, but cannot access the super class
+             *   option 1: try to get superClass's field and set proxy bean at one of the Sons;
+             *   option 2: handle the abstract superClass reference at end of bean initialization;
+             * @author scott
+             * @date 2019-02-01
+             */
+            private void handleSuperClass(Class target, List<Field> fields) {
+                if (target != null) {
+                    Class superclass = target.getSuperclass();
+                    if (superclass != null && !superclass.getSimpleName().equals(Object.class.getSimpleName())) {
+                        Field[] declaredFields = superclass.getDeclaredFields();
+                        if (declaredFields.length > 0) {
+                            for (Field field : declaredFields) {
+                                Reference reference = field.getAnnotation(Reference.class);
+                                if (reference != null && !fields.contains(field)) {
+                                    fields.add(field);
+                                }
+                            }
+                        }
+                        handleSuperClass(superclass, fields);
+                    }
+                }
             }
 
             /**
