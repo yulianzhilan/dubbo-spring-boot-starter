@@ -6,17 +6,6 @@ version = '2.1.2'
 
 description = """dubbo-spring-boot-starter"""
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8'
-}
-repositories {
-    maven { url "http://repo.maven.apache.org/maven2" }
-}
-ext {
-    springBootVersion = '2.1.1.RELEASE'
-}
 dependencies {
     implementation group: 'com.alibaba', name: 'dubbo', version: '2.6.0'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: "${springBootVersion}"
