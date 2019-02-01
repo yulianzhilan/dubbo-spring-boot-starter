@@ -110,21 +110,6 @@
       "sourceType": "com.alibaba.dubbo.config.ApplicationConfig"
     },
     {
-      "name": "spring.dubbo.application.qos-accept-foreign-ip",
-      "type": "java.lang.Boolean",
-      "sourceType": "com.alibaba.dubbo.config.ApplicationConfig"
-    },
-    {
-      "name": "spring.dubbo.application.qos-enable",
-      "type": "java.lang.Boolean",
-      "sourceType": "com.alibaba.dubbo.config.ApplicationConfig"
-    },
-    {
-      "name": "spring.dubbo.application.qos-port",
-      "type": "java.lang.Integer",
-      "sourceType": "com.alibaba.dubbo.config.ApplicationConfig"
-    },
-    {
       "name": "spring.dubbo.application.registries",
       "type": "java.util.List<com.alibaba.dubbo.config.RegistryConfig>",
       "sourceType": "com.alibaba.dubbo.config.ApplicationConfig"
@@ -187,11 +172,6 @@
     },
     {
       "name": "spring.dubbo.consumer.connections",
-      "type": "java.lang.Integer",
-      "sourceType": "com.alibaba.dubbo.config.ConsumerConfig"
-    },
-    {
-      "name": "spring.dubbo.consumer.corethreads",
       "type": "java.lang.Integer",
       "sourceType": "com.alibaba.dubbo.config.ConsumerConfig"
     },
@@ -291,11 +271,6 @@
       "sourceType": "com.alibaba.dubbo.config.ConsumerConfig"
     },
     {
-      "name": "spring.dubbo.consumer.queues",
-      "type": "java.lang.Integer",
-      "sourceType": "com.alibaba.dubbo.config.ConsumerConfig"
-    },
-    {
       "name": "spring.dubbo.consumer.reconnect",
       "type": "java.lang.String",
       "sourceType": "com.alibaba.dubbo.config.ConsumerConfig"
@@ -333,16 +308,6 @@
     {
       "name": "spring.dubbo.consumer.stub",
       "type": "java.lang.String",
-      "sourceType": "com.alibaba.dubbo.config.ConsumerConfig"
-    },
-    {
-      "name": "spring.dubbo.consumer.threadpool",
-      "type": "java.lang.String",
-      "sourceType": "com.alibaba.dubbo.config.ConsumerConfig"
-    },
-    {
-      "name": "spring.dubbo.consumer.threads",
-      "type": "java.lang.Integer",
       "sourceType": "com.alibaba.dubbo.config.ConsumerConfig"
     },
     {
@@ -434,11 +399,6 @@
     },
     {
       "name": "spring.dubbo.monitor.id",
-      "type": "java.lang.String",
-      "sourceType": "com.alibaba.dubbo.config.MonitorConfig"
-    },
-    {
-      "name": "spring.dubbo.monitor.interval",
       "type": "java.lang.String",
       "sourceType": "com.alibaba.dubbo.config.MonitorConfig"
     },

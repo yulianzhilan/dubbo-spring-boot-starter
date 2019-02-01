@@ -4,6 +4,7 @@ import java.lang.annotation.*;
 
 /**
  * Enable Dubbo (for provider or consumer) for spring boot application
+ * 启用dubbo服务端&&消费端
  *
  * @author xionghui
  * @version 1.0.0
@@ -11,6 +12,8 @@ import java.lang.annotation.*;
  */
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
+@EnableDubboConsumerConfiguration
+@EnableDubboProviderConfiguration
 @Documented
 public @interface EnableDubboConfiguration {
 

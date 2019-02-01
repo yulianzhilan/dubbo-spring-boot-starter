@@ -2,7 +2,9 @@ package com.alibaba.dubbo.spring.boot;
 
 import com.alibaba.dubbo.config.annotation.Service;
 import com.alibaba.dubbo.config.spring.ServiceBean;
-import com.alibaba.dubbo.spring.boot.annotation.EnableDubboConfiguration;
+import com.alibaba.dubbo.spring.boot.annotation.EnableDubboProviderConfiguration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
@@ -27,10 +29,12 @@ import java.util.Map;
  */
 @Configuration
 @ConditionalOnClass(Service.class)
-@ConditionalOnBean(annotation = EnableDubboConfiguration.class)
+@ConditionalOnBean(annotation = EnableDubboProviderConfiguration.class)
 @AutoConfigureAfter(DubboAutoConfiguration.class)
 @EnableConfigurationProperties(DubboProperties.class)
 public class DubboProviderAutoConfiguration extends DubboCommonAutoConfiguration implements ApplicationContextAware {
+
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
     private ApplicationContext applicationContext;
 
@@ -82,6 +86,9 @@ public class DubboProviderAutoConfiguration extends DubboCommonAutoConfiguration
         serviceConfig.afterPropertiesSet();
         serviceConfig.setRef(bean);
         serviceConfig.export();
+        if (logger.isDebugEnabled()) {
+            logger.debug("initial provider bean: " + beanName);
+        }
     }
 
     @Override

@@ -2,7 +2,7 @@ apply plugin: 'java'
 apply plugin: 'maven'
 
 group = 'com.alibaba.spring.boot'
-version = '2.0.1-SNAPSHOT'
+version = '2.1.1-SNAPSHOT'
 
 description = """dubbo-spring-boot-starter"""
 
@@ -18,7 +18,7 @@ ext {
     springBootVersion = '2.1.1.RELEASE'
 }
 dependencies {
-    implementation group: 'com.alibaba', name: 'dubbo', version: '2.6.5'
+    implementation group: 'com.alibaba', name: 'dubbo', version: '2.6.0'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: "${springBootVersion}"
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: "${springBootVersion}"
     implementation(group: 'org.springframework.boot', name: 'spring-boot-starter', version: "${springBootVersion}") {
