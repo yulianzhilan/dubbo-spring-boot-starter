@@ -52,12 +52,11 @@ public class HelloServiceImpl implements IHelloService {
 
 * 添加依赖:
 
-```xml
-    <dependency>
-        <groupId>com.alibaba.spring.boot</groupId>
-        <artifactId>dubbo-spring-boot-starter</artifactId>
-        <version>2.0.0</version>
-    </dependency>
+```gradle  
+    //指定dubbo版本 
+    implementation("com.alibaba:dubbo:2.6.5")
+    //指定dubbo-starter版本
+    implementation("com.alibaba.spring.boot:dubbo-spring-boot-starter:2.1.2-SNAPSHOT")
 ```
 
 * 在application.properties添加dubbo的相关配置信息，样例配置如下:
